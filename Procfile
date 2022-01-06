@@ -1,2 +1,2 @@
-capture: watch -n 2 ./capture   # CAPTURE_DIR, DEBUG
-render: ./render                # CAPTURE_DIR, OUTPUT_DIR, CLEAN, FPS
+capture: while true; do ./capture && sleep 2; done   # CAPTURE_DIR, DEBUG
+render: ./render                                     # CAPTURE_DIR, OUTPUT_DIR, CLEAN, FPS
