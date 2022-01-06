@@ -14,10 +14,14 @@ __outdir="${OUTPUT_DIR:-$__outdir}"
     mkdir -p $__outdir
 __outname=$(date '+%m-%d %H-%M')
 
+__fps="${FPS:-60}"
 ffmpeg -hide_banner -loglevel error \
-    -r 60 -f image2 -s 1920x1080 \
+    -r $__fps -f image2 -s 1920x1080 \
     -i "${__tmpdir}/%05d.png" \
     -vcodec libx264 -crf 25 -pix_fmt yuv420p \
     "${__outdir}/${__outname}.mp4"
 
-rm $__tmpdir/*
+__clean="${CLEAN:-}"
+[[ -n $__clean ]] && echo "cleaning output" && rm $__tmpdir/*
+
+echo "wrote ${__outdir}/${__outname}.mp4"

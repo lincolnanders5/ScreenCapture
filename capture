@@ -24,4 +24,10 @@ fi
 
 screencapture -d -x -r $__path
 
+echo "comparing ${__path} to ${__tmpdir}/${__newest}"
+perceptualdiff -threshold 100 -downsample 4 $__path "${__tmpdir}/${__newest}" 2&>1 /dev/null
+if [ $? -ne 0 ]; then
+    echo "deleting new version" && rm $__path
+fi
+
 echo $__intval
