@@ -24,10 +24,13 @@ fi
 
 screencapture -d -x -r $__path
 
-echo "comparing ${__path} to ${__tmpdir}/${__newest}"
-perceptualdiff -threshold 100 -downsample 4 $__path "${__tmpdir}/${__newest}" 2&>1 /dev/null
-if [ $? -ne 0 ]; then
+__dirnum=$(expr $(ls -t .scarchive/01/06/ | wc -l) + 1)
+if (( $__dirnum > 10 )); then
+  echo "comparing ${__path} to ${__tmpdir}/${__newest}"
+  perceptualdiff -threshold 100 -downsample 4 $__path "${__tmpdir}/${__newest}" > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
     echo "deleting new version" && rm $__path
+  fi
 fi
 
 echo $__intval
