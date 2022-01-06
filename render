@@ -1,0 +1,23 @@
+#!/bin/bash
+set -u
+
+# Set default location if one is not provided through the CAPTURE_DIR env variable
+__tmpdir="./.scarchive/$(date '+%m/%d')"
+__tmpdir="${CAPTURE_DIR:-$__tmpdir}"
+[ ! -d $__tmpdir ] && \
+    echo "Error: Directory ${__tmpdir} does not exist, exiting." && exit
+
+__outdir="./.scarchive/render"
+__outdir="${OUTPUT_DIR:-$__outdir}"
+[ ! -d $__outdir ] && \
+    echo "Warning: Directory ${__outdir} does not exist, creating." && \
+    mkdir -p $__outdir
+__outname=$(date '+%m-%d %H-%M')
+
+ffmpeg -hide_banner -loglevel error \
+    -r 60 -f image2 -s 1920x1080 \
+    -i "${__tmpdir}/%05d.png" \
+    -vcodec libx264 -crf 25 -pix_fmt yuv420p \
+    "${__outdir}/${__outname}.mp4"
+
+rm $__tmpdir/*

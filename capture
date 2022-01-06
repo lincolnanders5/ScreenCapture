@@ -15,7 +15,8 @@ __intval=$(expr $(echo $__newest | cut -d. -f1) + 1)
 printf -v __strval "%05d" $__intval
 __path="${__tmpdir}/${__strval}.png"
 
-if [[ -n $DEBUG ]]; then
+__debug="${DEBUG:-}"
+if [[ -n $__debug ]]; then
   echo "tmp dir:      ${__tmpdir}"
   echo "last capture: ${__newest} -> ${__intval}"
   echo "write path:   ${__path}"
