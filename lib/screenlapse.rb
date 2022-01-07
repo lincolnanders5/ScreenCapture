@@ -8,12 +8,15 @@ require_relative "screenlapse/version"
 module Screenlapse
   class Error < StandardError; end
 
-  def render_video(fps=6)
-    system "ffmpeg -hide_banner -loglevel error -r #{fps} -f 'image2' -s 1920x1080 -i \"#{archive_path}/#{datefmt}/%05d.png\" -vcodec libx264 -crf 25 -pix_fmt yuv420p \"#{video_path}\""
+  def render_video(fps)
+    system "ffmpeg -loglevel error -r #{fps} -f 'image2' -s 1920x1080 -i \"#{archive_path}/#{datefmt}/%05d.png\" -vcodec libx264 -crf 25 -pix_fmt yuv420p \"#{video_path}\""
   end
 
-  def render_gif(fps=6)
-    system "ffmpeg -hide_banner -loglevel error -r #{fps} -f 'image2' -s 1920x1080 -i \"#{archive_path}/#{datefmt}/%05d.png\" -filter_complex 'scale=1152:-1' -loop -1 \"#{gif_path}\""
+  def render_gif(fps, scale)
+    scale = 0.4 unless (0.00...1.00).cover? scale
+    pallet = "#{archive_path}/render/pallet.png"
+    system "ffmpeg -loglevel error -y -f 'image2' -i '#{archive_path}/#{datefmt}/%05d.png' -vf palettegen '#{pallet}'"
+    system "ffmpeg -loglevel error -r #{fps} -f 'image2' -s 1920x1080 -i '#{archive_path}/#{datefmt}/%05d.png' -i '#{pallet}' -filter_complex 'paletteuse,scale=iw*#{scale}:ih*#{scale}' -loop -1 \"#{gif_path}\""
   end
 
   def image_diff?(threshold=1000, downsample=4)
@@ -56,8 +59,8 @@ module Screenlapse
     Time.now.strftime("%m/%d")
   end
 
-  def movie_list
-    Dir.glob(".scarchive/render/*.mp4")
+  def render_list
+    (Dir.glob(".scarchive/render/*.mp4") + Dir.glob(".scarchive/render/*.gif"))
        .sort_by{ |f| File.mtime(f) }.reverse
   end
 end

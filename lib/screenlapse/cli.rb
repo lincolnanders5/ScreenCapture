@@ -34,17 +34,18 @@ module Screenlapse
     option :root, type: :string, desc: "Location to find the archive in"
     option :fps, type: :numeric, default: 8, desc: "Set the number of frames per image"
     option :gif, type: :boolean, desc: "render a gif instead of a video"
+    option :scale, type: :numeric, default: 0.4, desc: "scale factor to use for gif, 0-1"
     def render
       init_dir "#{archive_path}/render"
-      options[:gif] ? render_gif(options[:fps]) : render_video(options[:fps])
+      options[:gif] ? render_gif(options[:fps], options[:scale]) : render_video(options[:fps])
       puts "wrote #{options[:gif] ? gif_path : video_path}"
     end
 
     desc "open", "opens the last rendered movie"
     option :root, type: :string, required: false, desc: "Location to find the archive in"
     def open
-      puts "opening #{movie_list.first}"
-      system "open #{movie_list.first}"
+      puts "opening #{render_list.first}"
+      system "open #{render_list.first}"
     end
 
     desc "clean", "cleans out history of recorded snapshots"
@@ -57,7 +58,7 @@ module Screenlapse
     desc "list", "lists all rendered movies"
     option :root, type: :string, required: false, desc: "Location to find the archive in"
     def list
-      puts movie_list
+      puts render_list
     end
   end
 end

@@ -2,8 +2,8 @@
 A simple repo to create a recording of your screen using a series of screenshots
 automatically taken and sown together. Images are checked for noticeable 
 changes in the images before being fully saved. All images will be saved in a
-relative `.scarchive` directory.
-
+relative `.scarchive` directory. Images can then be rendered into a video at a 
+given frame rate or to a GIF with optional scaling.
 
 ## Installation
 Install it yourself as:

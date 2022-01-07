@@ -10,5 +10,4 @@
 
 ## [0.3.0] - 2022-01-07
 - Improve gem compatibility
-- Add `render --gif` support
-- TODO: Add `capture --delay` or `capture --fps` options
+- Add `render --gif (--scale=0.3)` support
