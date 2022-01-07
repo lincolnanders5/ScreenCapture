@@ -12,6 +12,8 @@ module Screenlapse
     option :root, type: :string, required: false, desc: "Location to find the archive in"
     def capture
       init_archive
+      init_archive_date
+
       system "screencapture -x -r #{next_capture}"
 
       unless image_diff?
@@ -34,25 +36,31 @@ module Screenlapse
     option :root, type: :string, required: false, desc: "Location to find the archive in"
     option :fps, type: :numeric, required: false, default: 8, desc: "Set the number of frames per image"
     def render
-      system "ffmpeg -hide_banner -loglevel error -r #{options[:fps]} -f 'image2' -s 1920x1080 -i \"#{archive_path}/%05d.png\" -vcodec libx264 -crf 25 -pix_fmt yuv420p \"#{video_path}\""
+      init_render
+      system "ffmpeg -hide_banner -loglevel error -r #{options[:fps]} -f 'image2' -s 1920x1080 -i \"#{archive_path}/#{datefmt}/%05d.png\" -vcodec libx264 -crf 25 -pix_fmt yuv420p \"#{video_path}\""
       puts "wrote #{video_path}"
     end
 
     desc "open", "opens the last rendered movie"
     def open
-      system "open #{video_path}"
+      system "open #{movie_list.first}"
     end
 
     desc "clean", "cleans out history of recorded snapshots"
     def clean
-      puts "CLeaning #{archive_path}"
+      puts "cleaning #{archive_path}"
       FileUtils.rm_rf("#{archive_path}/.", secure: true)
+    end
+
+    desc "list", "lists all rendered movies"
+    def list
+      puts movie_list
     end
 
     private
 
     def video_path
-      "#{archive_path}/#{Time.now.strftime("%H-%M")}.mp4"
+      "#{archive_path}/render/#{Time.now.strftime("%m-%d-%H-%M")}.mp4"
     end
 
     def image_diff?(threshold=1000, downsample=4)
@@ -61,11 +69,11 @@ module Screenlapse
     end
 
     def next_capture
-      "#{archive_path}/#{next_capture_num}.png"
+      "#{archive_path}/#{datefmt}/#{next_capture_num}.png"
     end
 
     def last_capture
-      Dir.glob(archive_path + "/*.png").max_by {|f| File.basename(f, ".*").to_i }
+      Dir.glob("#{archive_path}/#{datefmt}/*.png").max_by {|f| File.basename(f, ".*").to_i }
     end
 
     def next_capture_num
@@ -80,9 +88,30 @@ module Screenlapse
       end
     end
 
+    def init_archive_date
+      unless File.exists?("#{archive_path}/#{datefmt}") && File.directory?("#{archive_path}/#{datefmt}")
+        FileUtils.mkdir_p "#{archive_path}/#{datefmt}"
+      end
+    end
+
+    def init_render
+      unless File.exists?("#{archive_path}/render") && File.directory?("#{archive_path}/render")
+        FileUtils.mkdir_p "#{archive_path}/render"
+      end
+    end
+
     def archive_path(root: ".")
       root = options[:root] unless options[:root].nil?
-      File.expand_path root + "/.scarchive/" + Time.now.strftime("%m/%d")
+      File.expand_path root + "/.scarchive/"
+    end
+
+    def datefmt
+      Time.now.strftime("%m/%d")
+    end
+
+    def movie_list
+      Dir.glob(".scarchive/render/*.mp4")
+         .sort_by{ |f| File.mtime(f) }
     end
   end
 end
