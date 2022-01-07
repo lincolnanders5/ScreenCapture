@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    screenlapse (0.2.0)
+    la-screenlapse (0.2.0)
       pry
       streamio-ffmpeg
       thor
@@ -45,10 +45,10 @@ PLATFORMS
   x86_64-darwin-19
 
 DEPENDENCIES
+  la-screenlapse!
   minitest (~> 5.0)
   rake (~> 13.0)
   rubocop (~> 1.21)
-  screenlapse!
 
 BUNDLED WITH
    2.2.29
