@@ -1,9 +1,10 @@
 # Screenlapse
-A simple repo to create a recording of your screen using a series of screenshots
-automatically taken and sown together. Images are checked for noticeable 
-changes in the images before being fully saved. All images will be saved in a
-relative `.scarchive` directory. Images can then be rendered into a video at a 
-given frame rate or to a GIF with optional scaling.
+![A demo recording of development of screenlapse. A desktop shows code being 
+written over a few seconds of the gif.](mov/01-07-05-14.gif)
+
+A simple gem to create a recording of your screen using a series of screenshots
+automatically taken in the background and sown together. Recordings can be 
+exported as videos at a given frame rate or as a GIF with optional scaling.
 
 ## Installation
 Install it yourself as:
