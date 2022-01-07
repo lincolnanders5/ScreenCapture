@@ -1,15 +1,22 @@
-# Screen Recorder
+# Screenlapse
 A simple repo to create a recording of your screen using a series of screenshots
-automatically taken and sown together. Images are checked for difference in 
+automatically taken and sown together. Images are checked for difference in
 
-## Running
-The easiest way to run is with the [foreman][foreman] gem installed,
 
-``` shell
-foreman run capture
-foreman run render
+## Installation
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'screenlapse'
 ```
-Check Procfile for equivalent commands.
+
+And then execute:
+
+    $ bundle install
+
+Or install it yourself as:
+
+    $ gem install screenlapse
 
 
 ## Configuring
@@ -25,5 +32,10 @@ Check Procfile for equivalent commands.
 - `CLEAN`: For `render` script, optionally deletes all screenshots in
   `CAPTURE_DIR` after rendering the video.
 - `DEBUG`: Show some debug print messages
+
+
+## License
+
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 [foreman]: https://github.com/ddollar/foreman
