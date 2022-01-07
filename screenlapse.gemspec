@@ -3,7 +3,7 @@
 require_relative "lib/screenlapse/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "la-screenlapse"
+  spec.name          = "screenlapse"
   spec.version       = Screenlapse::VERSION
   spec.authors       = ["Lincoln Anders"]
   spec.email         = ["lincolnanders@gmail.com"]
@@ -26,15 +26,14 @@ Gem::Specification.new do |spec|
       (f == __FILE__) || f.match(%r{\A(?:(?:test|spec|features)/|\.(?:git|travis|circleci)|appveyor)})
     end
   end
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  spec.bindir        = "bin"
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
-  spec.add_dependency 'thor'
-  spec.add_dependency 'streamio-ffmpeg'
-  spec.add_dependency 'pry'
+  spec.add_dependency 'thor', '~> 1.1.0'
+  spec.add_dependency 'streamio-ffmpeg', '~> 3.0.2'
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html

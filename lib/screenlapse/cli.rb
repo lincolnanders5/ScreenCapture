@@ -1,8 +1,5 @@
 require "thor"
 require "fileutils"
-require "pathname"
-require "streamio-ffmpeg"
-require "pry"
 
 require "screenlapse"
 include Screenlapse
@@ -12,8 +9,8 @@ module Screenlapse
     desc "capture (delay)", "capture a screenshot every (delay=2) seconds"
     option :root, type: :string, required: false, desc: "Location to find the archive in"
     def capture
-      init_archive
-      init_archive_date
+      init_dir archive_path
+      init_dir "#{archive_path}/#{datefmt}"
 
       system "screencapture -x -r #{next_capture}"
 
@@ -37,8 +34,8 @@ module Screenlapse
     option :root, type: :string, required: false, desc: "Location to find the archive in"
     option :fps, type: :numeric, required: false, default: 8, desc: "Set the number of frames per image"
     def render
-      init_render
-      system "ffmpeg -hide_banner -loglevel error -r #{options[:fps]} -f 'image2' -s 1920x1080 -i \"#{archive_path}/#{datefmt}/%05d.png\" -vcodec libx264 -crf 25 -pix_fmt yuv420p \"#{video_path}\""
+      init_dir "#{archive_path}/render"
+      render_video options[:fps]
       puts "wrote #{video_path}"
     end
 

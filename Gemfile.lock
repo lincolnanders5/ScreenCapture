@@ -1,25 +1,19 @@
 PATH
   remote: .
   specs:
-    la-screenlapse (0.2.0)
-      pry
-      streamio-ffmpeg
-      thor
+    screenlapse (0.3.0)
+      streamio-ffmpeg (~> 3.0.2)
+      thor (~> 1.1.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
-    coderay (1.1.3)
-    method_source (1.0.0)
     minitest (5.14.4)
     multi_json (1.15.0)
     parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)
-    pry (0.14.1)
-      coderay (~> 1.1)
-      method_source (~> 1.0)
     rainbow (3.0.0)
     rake (13.0.6)
     regexp_parser (2.2.0)
@@ -45,10 +39,10 @@ PLATFORMS
   x86_64-darwin-19
 
 DEPENDENCIES
-  la-screenlapse!
   minitest (~> 5.0)
   rake (~> 13.0)
   rubocop (~> 1.21)
+  screenlapse!
 
 BUNDLED WITH
    2.2.29

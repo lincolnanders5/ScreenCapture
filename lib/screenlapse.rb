@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+require "fileutils"
+require "pathname"
+require "streamio-ffmpeg"
 
 require_relative "screenlapse/version"
 
@@ -7,6 +10,10 @@ module Screenlapse
 
   def video_path
     "#{archive_path}/render/#{Time.now.strftime("%m-%d-%H-%M")}.mp4"
+  end
+
+  def render_video(fps=6)
+    system "ffmpeg -hide_banner -loglevel error -r #{fps} -f 'image2' -s 1920x1080 -i \"#{archive_path}/#{datefmt}/%05d.png\" -vcodec libx264 -crf 25 -pix_fmt yuv420p \"#{video_path}\""
   end
 
   def image_diff?(threshold=1000, downsample=4)
@@ -28,22 +35,8 @@ module Screenlapse
     int.to_s.rjust(5, "0")
   end
 
-  def init_archive
-    unless File.exists?(archive_path) && File.directory?(archive_path)
-      FileUtils.mkdir_p archive_path
-    end
-  end
-
-  def init_archive_date
-    unless File.exists?("#{archive_path}/#{datefmt}") && File.directory?("#{archive_path}/#{datefmt}")
-      FileUtils.mkdir_p "#{archive_path}/#{datefmt}"
-    end
-  end
-
-  def init_render
-    unless File.exists?("#{archive_path}/render") && File.directory?("#{archive_path}/render")
-      FileUtils.mkdir_p "#{archive_path}/render"
-    end
+  def init_dir(path)
+    FileUtils.mkdir_p path unless File.exist?(path) && File.directory?(path)
   end
 
   def archive_path(root: ".")
@@ -57,6 +50,6 @@ module Screenlapse
 
   def movie_list
     Dir.glob(".scarchive/render/*.mp4")
-       .sort_by{ |f| File.mtime(f) }
+       .sort_by{ |f| File.mtime(f) }.reverse
   end
 end

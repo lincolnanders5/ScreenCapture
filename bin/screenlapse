@@ -2,4 +2,5 @@
 require 'bundler/setup'
 require 'screenlapse'
 require 'screenlapse/cli'
-Screenlapse::CLI.start
+
+Screenlapse::CLI.start(ARGV)
