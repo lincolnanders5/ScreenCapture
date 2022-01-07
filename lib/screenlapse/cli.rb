@@ -43,17 +43,21 @@ module Screenlapse
     end
 
     desc "open", "opens the last rendered movie"
+    option :root, type: :string, required: false, desc: "Location to find the archive in"
     def open
+      puts "opening #{movie_list.first}"
       system "open #{movie_list.first}"
     end
 
     desc "clean", "cleans out history of recorded snapshots"
+    option :root, type: :string, required: false, desc: "Location to find the archive in"
     def clean
       puts "cleaning #{archive_path}"
       FileUtils.rm_rf("#{archive_path}/.", secure: true)
     end
 
     desc "list", "lists all rendered movies"
+    option :root, type: :string, required: false, desc: "Location to find the archive in"
     def list
       puts movie_list
     end
