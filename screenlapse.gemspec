@@ -34,6 +34,7 @@ Gem::Specification.new do |spec|
   # spec.add_dependency "example-gem", "~> 1.0"
   spec.add_dependency 'thor'
   spec.add_dependency 'streamio-ffmpeg'
+  spec.add_dependency 'pry'
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html

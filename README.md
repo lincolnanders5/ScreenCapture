@@ -1,20 +1,12 @@
 # Screenlapse
 A simple repo to create a recording of your screen using a series of screenshots
-automatically taken and sown together. Images are checked for difference in
+automatically taken and sown together. Images are checked for noticeable 
+changes in the images before being fully saved. All images will be saved in a
+relative `.scarchive` directory.
 
 
 ## Installation
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'screenlapse'
-```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
+Install it yourself as:
 
     $ gem install screenlapse
 

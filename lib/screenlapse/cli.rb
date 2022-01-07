@@ -2,15 +2,17 @@ require "thor"
 require "fileutils"
 require "pathname"
 require "streamio-ffmpeg"
+require "pry"
 
 require "screenlapse"
 
 module Screenlapse
   class CLI < Thor
     desc "capture (delay)", "capture a screenshot every (delay=2) seconds"
+    option :root, type: :string, required: false, desc: "Location to find the archive in"
     def capture
       init_archive
-      system "screencapture -d -x -r #{next_capture}"
+      system "screencapture -x -r #{next_capture}"
 
       unless image_diff?
         puts "Duplicate images: #{File.basename(last_capture, ".*")} -> #{File.basename(next_capture, ".*")}"
@@ -19,17 +21,21 @@ module Screenlapse
     end
 
     desc "record", "record continuous stream of screenshots"
-    def record(delay=2)
+    option :root, type: :string, required: false, desc: "Location to find the archive in"
+    option :delay, type: :numeric, required: false, default: 2, desc: "How long to wait between screenshots"
+    def record
       while true
         capture
-        sleep delay
+        sleep options[:delay]
       end
     end
 
     desc "render", "render out a video of the current archive"
+    option :root, type: :string, required: false, desc: "Location to find the archive in"
+    option :fps, type: :numeric, required: false, default: 8, desc: "Set the number of frames per image"
     def render
-      fps = 6
-      system "ffmpeg -hide_banner -loglevel error -r #{fps} -f image2 -s 1920x1080 -i \"#{archive_path}/%05d.png\" -vcodec libx264 -crf 25 -pix_fmt yuv420p \"#{video_path}\""
+      system "ffmpeg -hide_banner -loglevel error -r #{options[:fps]} -f 'image2' -s 1920x1080 -i \"#{archive_path}/%05d.png\" -vcodec libx264 -crf 25 -pix_fmt yuv420p \"#{video_path}\""
+      puts "wrote #{video_path}"
     end
 
     desc "open", "opens the last rendered movie"
@@ -46,7 +52,7 @@ module Screenlapse
     private
 
     def video_path
-      "#{archive_path}/render.mp4"
+      "#{archive_path}/#{Time.now.strftime("%H-%M")}.mp4"
     end
 
     def image_diff?(threshold=1000, downsample=4)
@@ -75,6 +81,7 @@ module Screenlapse
     end
 
     def archive_path(root: ".")
+      root = options[:root] unless options[:root].nil?
       File.expand_path root + "/.scarchive/" + Time.now.strftime("%m/%d")
     end
   end
