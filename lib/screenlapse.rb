@@ -8,12 +8,12 @@ require_relative "screenlapse/version"
 module Screenlapse
   class Error < StandardError; end
 
-  def video_path
-    "#{archive_path}/render/#{Time.now.strftime("%m-%d-%H-%M")}.mp4"
-  end
-
   def render_video(fps=6)
     system "ffmpeg -hide_banner -loglevel error -r #{fps} -f 'image2' -s 1920x1080 -i \"#{archive_path}/#{datefmt}/%05d.png\" -vcodec libx264 -crf 25 -pix_fmt yuv420p \"#{video_path}\""
+  end
+
+  def render_gif(fps=6)
+    system "ffmpeg -hide_banner -loglevel error -r #{fps} -f 'image2' -s 1920x1080 -i \"#{archive_path}/#{datefmt}/%05d.png\" -filter_complex 'scale=1152:-1' -loop -1 \"#{gif_path}\""
   end
 
   def image_diff?(threshold=1000, downsample=4)
@@ -42,6 +42,14 @@ module Screenlapse
   def archive_path(root: ".")
     root = options[:root] unless options[:root].nil?
     File.expand_path root + "/.scarchive/"
+  end
+
+  def video_path
+    "#{archive_path}/render/#{Time.now.strftime("%m-%d-%H-%M")}.mp4"
+  end
+
+  def gif_path
+    video_path.sub("mp4", "gif")
   end
 
   def datefmt

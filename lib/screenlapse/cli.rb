@@ -31,12 +31,13 @@ module Screenlapse
     end
 
     desc "render", "render out a video of the current archive"
-    option :root, type: :string, required: false, desc: "Location to find the archive in"
-    option :fps, type: :numeric, required: false, default: 8, desc: "Set the number of frames per image"
+    option :root, type: :string, desc: "Location to find the archive in"
+    option :fps, type: :numeric, default: 8, desc: "Set the number of frames per image"
+    option :gif, type: :boolean, desc: "render a gif instead of a video"
     def render
       init_dir "#{archive_path}/render"
-      render_video options[:fps]
-      puts "wrote #{video_path}"
+      options[:gif] ? render_gif(options[:fps]) : render_video(options[:fps])
+      puts "wrote #{options[:gif] ? gif_path : video_path}"
     end
 
     desc "open", "opens the last rendered movie"
