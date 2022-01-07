@@ -34,9 +34,14 @@ can then be used to compile the images into one video.
 screenlapse record
 screenlapse render --fps=24
 screenlapse open                # View created movie
+
+screenlapse render --gif --scale=0.3
+screenlapse open                # View created gif
+
 screenlapse clean
 ```
 
 
 ## License
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the 
+[MIT License](https://opensource.org/licenses/MIT).
