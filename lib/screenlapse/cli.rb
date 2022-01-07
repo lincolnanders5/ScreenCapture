@@ -10,8 +10,6 @@ module Screenlapse
     desc "capture (delay)", "capture a screenshot every (delay=2) seconds"
     def capture
       init_archive
-      puts next_capture, last_capture, next_capture_num
-
       system "screencapture -d -x -r #{next_capture}"
 
       unless image_diff?
@@ -42,7 +40,7 @@ module Screenlapse
     desc "clean", "cleans out history of recorded snapshots"
     def clean
       puts "CLeaning #{archive_path}"
-      # FileUtils.rm_rf("#{archive_path}/.", secure: true)
+      FileUtils.rm_rf("#{archive_path}/.", secure: true)
     end
 
     private
@@ -65,7 +63,8 @@ module Screenlapse
     end
 
     def next_capture_num
-      int = File.basename(last_capture, ".*").to_i + 1
+      int = 1
+      int = File.basename(last_capture, ".*").to_i + 1 unless last_capture.nil?
       int.to_s.rjust(5, "0")
     end
 
