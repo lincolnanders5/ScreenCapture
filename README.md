@@ -20,6 +20,8 @@ Check Procfile for equivalent commands.
   `MM-DD HH-mm.mp4`
 - `FPS`: For `render` script, specifies what the output video framerate should
   be (defaults to 60)
+- `SLEEP`: For `capture` script, sets how long the program should sleep for. For
+  use with `LOOP=1`.
 - `CLEAN`: For `render` script, optionally deletes all screenshots in
   `CAPTURE_DIR` after rendering the video.
 - `DEBUG`: Show some debug print messages

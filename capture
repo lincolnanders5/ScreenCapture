@@ -34,3 +34,6 @@ if (( $__dirnum > 10 )); then
 fi
 
 echo $__intval
+
+__loop="${LOOP:-}"
+[[ -n $__loop ]] && sleep ${SLEEP:-2}
